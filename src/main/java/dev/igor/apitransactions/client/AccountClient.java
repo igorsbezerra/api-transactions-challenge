@@ -1,0 +1,14 @@
+package dev.igor.apitransactions.client;
+
+import dev.igor.apitransactions.config.AccountFeignClientConfig;
+import dev.igor.apitransactions.dto.AccountDTO;
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+@FeignClient(name = "account", url = "http://localhost:8081", configuration = AccountFeignClientConfig.class)
+public interface AccountClient {
+    @RequestMapping(method = RequestMethod.GET, value = "/accounts/{accountCode}")
+    AccountDTO findByAccountCode(@PathVariable("accountCode") String accountCode);
+}

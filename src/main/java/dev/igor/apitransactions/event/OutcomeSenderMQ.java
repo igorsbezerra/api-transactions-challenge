@@ -1,24 +1,21 @@
 package dev.igor.apitransactions.event;
 
-import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Component;
 
-import lombok.extern.log4j.Log4j2;
+import dev.igor.apitransactions.config.RabbitMQConfig;
 
 @Component
-@Log4j2
 public class OutcomeSenderMQ {
     private final RabbitTemplate rabbitTemplate;
-    private final Queue queueOutcome;
+    private final RabbitMQConfig rabbitMQConfig;
 
-    public OutcomeSenderMQ(RabbitTemplate rabbitTemplate, Queue queue) {
+    public OutcomeSenderMQ(RabbitTemplate rabbitTemplate, RabbitMQConfig rabbitMQConfig) {
         this.rabbitTemplate = rabbitTemplate;
-        this.queueOutcome = queue;
+        this.rabbitMQConfig = rabbitMQConfig;
     }
 
     public void sendOutcome(String message) {
-        log.info("*** OutcomeSenderMQ ***");
-        rabbitTemplate.convertAndSend(queueOutcome.getName(), message);
+        rabbitTemplate.convertAndSend(rabbitMQConfig.queueOutcome().getName(), message);
     }
 }

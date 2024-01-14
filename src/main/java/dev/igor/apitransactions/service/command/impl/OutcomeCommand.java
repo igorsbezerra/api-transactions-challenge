@@ -12,14 +12,19 @@ import dev.igor.apitransactions.model.enums.TypeTransaction;
 import dev.igor.apitransactions.service.command.CommandHandler;
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 @Component
 public class OutcomeCommand implements CommandHandler {
     private final AccountClient accountClient;
     private final OutcomeSenderMQ senderMQ;
+    private final ObjectMapper mapper;
 
-    public OutcomeCommand(AccountClient accountClient, OutcomeSenderMQ senderMQ) {
+    public OutcomeCommand(AccountClient accountClient, OutcomeSenderMQ senderMQ, ObjectMapper mapper) {
         this.accountClient = accountClient;
         this.senderMQ = senderMQ;
+        this.mapper = mapper;
     }
 
     @Override
@@ -33,7 +38,14 @@ public class OutcomeCommand implements CommandHandler {
             throw new UnavailableAccountException();
         }
     
-        senderMQ.sendOutcome("message :)");
+        String json = "";
+        try {
+            json = mapper.writeValueAsString(transactionItem);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Failed to generate json string");
+        }
+
+        senderMQ.sendOutcome(json);
 
         return transactionItem;
     }

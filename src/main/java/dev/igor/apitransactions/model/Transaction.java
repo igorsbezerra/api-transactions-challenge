@@ -1,11 +1,11 @@
 package dev.igor.apitransactions.model;
 
-import dev.igor.apitransactions.api.request.TransactionRequest;
-import dev.igor.apitransactions.model.enums.TypeTransaction;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -14,32 +14,26 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "transactions")
+@Table(name = "transaction")
 public class Transaction {
     @Id
     @Column(name = "id", length = 36, nullable = false)
     private String id;
-    @Column(name = "source_account_id", length = 36)
-    private String sourceAccount;
-    @Column(name = "target_account_id", length = 36)
-    private String targetAccount;
-    @Column(precision = 10, scale = 2)
-    private BigDecimal amount;
-    @Enumerated(EnumType.STRING)
-    private TypeTransaction type;
     private boolean devolution;
+    private LocalDateTime createdAt;
+    @OneToMany(mappedBy = "transaction", cascade = CascadeType.ALL)
+    private List<TransactionItem> transactionItems;
 
-    public Transaction(String id, String sourceAccount, String targetAccount, BigDecimal amount, boolean devolution) {
+    public Transaction(String id, boolean devolution, LocalDateTime createdAt) {
         this.id = id;
-        this.sourceAccount = sourceAccount;
-        this.targetAccount = targetAccount;
-        this.amount = amount;
         this.devolution = devolution;
+        this.createdAt = createdAt;
     }
 
-    public static Transaction create(TransactionRequest request) {
+    public static Transaction create() {
         String id = UUID.randomUUID().toString();
-        BigDecimal value2 = new BigDecimal(request.getAmount());
-        return new Transaction(id, request.getSourceAccount(), request.getTargetAccount(), value2, false);
+        LocalDateTime now = LocalDateTime.now();
+        boolean devolution = false;
+        return new Transaction(id, devolution, now);
     }
 }

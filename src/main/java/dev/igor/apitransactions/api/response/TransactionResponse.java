@@ -1,6 +1,6 @@
 package dev.igor.apitransactions.api.response;
 
-import dev.igor.apitransactions.model.Transaction;
+import dev.igor.apitransactions.model.TransactionItem;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,7 +14,7 @@ public class TransactionResponse {
     private String targetAccount;
     private String type;
 
-    public static TransactionResponse of(Transaction transaction) {
+    public static TransactionResponse of(TransactionItem transaction) {
         return new TransactionResponse(
                 transaction.getId(),
                 transaction.getSourceAccount(),

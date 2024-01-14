@@ -3,6 +3,8 @@ package dev.igor.apitransactions.service.command.impl;
 import dev.igor.apitransactions.api.request.TransactionRequest;
 import dev.igor.apitransactions.api.response.TransactionResponse;
 import dev.igor.apitransactions.dto.AccountDTO;
+import dev.igor.apitransactions.model.Transaction;
+import dev.igor.apitransactions.model.TransactionItem;
 import dev.igor.apitransactions.model.enums.TypeTransaction;
 import dev.igor.apitransactions.service.command.CommandHandler;
 import dev.igor.apitransactions.service.command.TransactionCommandHandler;
@@ -22,7 +24,7 @@ public class CommandApp implements TransactionCommandHandler {
     }
 
     @Override
-    public TransactionResponse handler(TypeTransaction type, AccountDTO account, TransactionRequest request) {
+    public TransactionItem handler(TypeTransaction type, AccountDTO account, TransactionRequest request, Transaction transaction) {
         List<Map<TypeTransaction, CommandHandler>> commands =
                 List.of(
                     Map.of(TypeTransaction.INCOME, incomeCommand),
@@ -32,7 +34,7 @@ public class CommandApp implements TransactionCommandHandler {
         for (Map<TypeTransaction, CommandHandler> command : commands) {
             if (command.containsKey(type)) {
                 CommandHandler commandHandler = command.get(type);
-                return commandHandler.command(account, request);
+                return commandHandler.command(account, request, transaction);
             }
         }
         return null;

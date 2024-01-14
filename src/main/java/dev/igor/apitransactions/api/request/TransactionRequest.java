@@ -16,6 +16,4 @@ public class TransactionRequest {
     private String targetAccount;
     @NotEmpty
     private String amount;
-    @NotEmpty
-    private String type;
 }

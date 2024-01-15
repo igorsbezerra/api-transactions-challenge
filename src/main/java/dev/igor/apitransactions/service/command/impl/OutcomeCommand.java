@@ -2,6 +2,7 @@ package dev.igor.apitransactions.service.command.impl;
 
 import dev.igor.apitransactions.api.request.TransactionRequest;
 import dev.igor.apitransactions.client.AccountClient;
+import dev.igor.apitransactions.client.NotificationClient;
 import dev.igor.apitransactions.dto.AccountDTO;
 import dev.igor.apitransactions.dto.AvailableAccount;
 import dev.igor.apitransactions.error.UnavailableAccountException;
@@ -20,11 +21,13 @@ public class OutcomeCommand implements CommandHandler {
     private final AccountClient accountClient;
     private final OutcomeSenderMQ senderMQ;
     private final ObjectMapper mapper;
+    private final NotificationClient notification;
 
-    public OutcomeCommand(AccountClient accountClient, OutcomeSenderMQ senderMQ, ObjectMapper mapper) {
+    public OutcomeCommand(AccountClient accountClient, OutcomeSenderMQ senderMQ, ObjectMapper mapper, NotificationClient notification) {
         this.accountClient = accountClient;
         this.senderMQ = senderMQ;
         this.mapper = mapper;
+        this.notification = notification;
     }
 
     @Override
@@ -46,6 +49,7 @@ public class OutcomeCommand implements CommandHandler {
         }
 
         senderMQ.sendOutcome(json);
+        notification.sent();
 
         return transactionItem;
     }

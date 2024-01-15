@@ -1,6 +1,7 @@
 package dev.igor.apitransactions.service.command.impl;
 
 import dev.igor.apitransactions.api.request.TransactionRequest;
+import dev.igor.apitransactions.client.NotificationClient;
 import dev.igor.apitransactions.dto.AccountDTO;
 import dev.igor.apitransactions.event.IncomeSenderMQ;
 import dev.igor.apitransactions.model.Transaction;
@@ -17,10 +18,12 @@ public class IncomeCommand implements CommandHandler {
 
     private final ObjectMapper mapper;
     private final IncomeSenderMQ senderMQ;
+    private final NotificationClient notification;
 
-    public IncomeCommand(ObjectMapper mapper, IncomeSenderMQ senderMQ) {
+    public IncomeCommand(ObjectMapper mapper, IncomeSenderMQ senderMQ, NotificationClient notification) {
         this.mapper = mapper;
         this.senderMQ = senderMQ;
+        this.notification = notification;
     }
 
     @Override
@@ -37,6 +40,7 @@ public class IncomeCommand implements CommandHandler {
         }
 
         senderMQ.sendIncome(json);
+        notification.sent();
 
         return transactionItem;
     }

@@ -19,13 +19,14 @@ public class TransactionItem {
     @Id
     @Column(name = "id", length = 36, nullable = false)
     private String id;
-    @Column(name = "source_account_id", length = 36)
+    @Column(name = "source_account_id", length = 36, nullable = false)
     private String sourceAccount;
-    @Column(name = "target_account_id", length = 36)
+    @Column(name = "target_account_id", length = 36, nullable = false)
     private String targetAccount;
-    @Column(precision = 10, scale = 2)
+    @Column(precision = 10, scale = 2, nullable = false)
     private BigDecimal amount;
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private TypeTransaction type;
     @ManyToOne
     @JoinColumn(name = "transaction_id")

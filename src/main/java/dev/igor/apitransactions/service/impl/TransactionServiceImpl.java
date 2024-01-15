@@ -1,6 +1,7 @@
 package dev.igor.apitransactions.service.impl;
 
 import dev.igor.apitransactions.api.request.TransactionRequest;
+import dev.igor.apitransactions.api.response.TransactionResponse;
 import dev.igor.apitransactions.client.AccountClient;
 import dev.igor.apitransactions.dto.AccountDTO;
 import dev.igor.apitransactions.error.ActionsYourSelfException;
@@ -27,7 +28,7 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public void createTransaction(TransactionRequest request) {
+    public TransactionResponse createTransaction(TransactionRequest request) {
         if (request.getTargetAccount().equals(request.getSourceAccount())) {
             throw new ActionsYourSelfException();
         }
@@ -44,5 +45,6 @@ public class TransactionServiceImpl implements TransactionService {
 
         transaction.setTransactionItems(List.of(income, outcome));
         repository.save(transaction);
+        return TransactionResponse.of(transaction);
     }
 }

@@ -1,6 +1,7 @@
 package dev.igor.apitransactions.api.controller;
 
 import dev.igor.apitransactions.api.request.TransactionRequest;
+import dev.igor.apitransactions.api.response.TransactionResponse;
 import dev.igor.apitransactions.service.TransactionService;
 
 import org.springframework.http.HttpStatus;
@@ -20,8 +21,8 @@ public class TransactionController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> createTransaction(@RequestBody() TransactionRequest request) {
-        transactionService.createTransaction(request);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<TransactionResponse> createTransaction(@RequestBody() TransactionRequest request) {
+        
+        return ResponseEntity.status(HttpStatus.CREATED).body(transactionService.createTransaction(request));
     }
 }

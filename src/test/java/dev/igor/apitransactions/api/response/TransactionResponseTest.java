@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import dev.igor.apitransactions.model.Transaction;
+
 @ExtendWith(MockitoExtension.class)
 public class TransactionResponseTest {
     @Test
@@ -15,5 +17,14 @@ public class TransactionResponseTest {
         dto.setId(expectedId);
 
         Assertions.assertEquals(expectedId, dto.getId());
+    }
+
+    @Test
+    void method_of() {
+        Transaction transaction = Transaction.create();
+
+        TransactionResponse response = TransactionResponse.of(transaction);
+
+        Assertions.assertEquals(transaction.getId(), response.getId());
     }
 }

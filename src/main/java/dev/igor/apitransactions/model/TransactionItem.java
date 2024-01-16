@@ -12,7 +12,6 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @Entity
 @Table(name = "transaction_item")
 public class TransactionItem {

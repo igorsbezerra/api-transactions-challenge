@@ -1,4 +1,4 @@
-package model;
+package dev.igor.apitransactions.model;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -9,8 +9,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import dev.igor.apitransactions.api.request.TransactionRequest;
-import dev.igor.apitransactions.model.Transaction;
-import dev.igor.apitransactions.model.TransactionItem;
 import dev.igor.apitransactions.model.enums.TypeTransaction;
 
 @ExtendWith(MockitoExtension.class)

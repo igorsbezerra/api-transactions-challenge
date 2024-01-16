@@ -1,6 +1,5 @@
-package model;
+package dev.igor.apitransactions.model;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -9,9 +8,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import dev.igor.apitransactions.model.Transaction;
-import dev.igor.apitransactions.model.TransactionItem;
 
 @ExtendWith(MockitoExtension.class)
 public class TransactionTest {
@@ -32,12 +28,19 @@ public class TransactionTest {
         Assertions.assertEquals(expectedDevolution, transaction.isDevolution());
         Assertions.assertEquals(expectedCreatedAt, transaction.getCreatedAt());
         Assertions.assertEquals(expectedTransactionItems, transaction.getTransactionItems());
+
+        Transaction transaction2 = new Transaction(expectedId, expectedDevolution, expectedCreatedAt, expectedTransactionItems);
+
+        Assertions.assertEquals(expectedId, transaction2.getId());
+        Assertions.assertEquals(expectedDevolution, transaction2.isDevolution());
+        Assertions.assertEquals(expectedCreatedAt, transaction2.getCreatedAt());
+        Assertions.assertEquals(expectedTransactionItems, transaction2.getTransactionItems());
     }
 
     @Test
     void create_tranasction_method_factory() {
         Transaction transaction = Transaction.create();
-        
+
         Assertions.assertNotNull(transaction.getId());
         Assertions.assertNotNull(transaction.getCreatedAt());
         Assertions.assertFalse(transaction.isDevolution());

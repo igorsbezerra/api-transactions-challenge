@@ -10,7 +10,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import dev.igor.apitransactions.api.controller.TransactionController;
 import dev.igor.apitransactions.api.request.TransactionRequest;
 import dev.igor.apitransactions.api.response.TransactionResponse;
 import dev.igor.apitransactions.service.TransactionService;

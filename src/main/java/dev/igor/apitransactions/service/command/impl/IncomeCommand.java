@@ -15,13 +15,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Component
 public class IncomeCommand implements CommandHandler {
-
-    private final ObjectMapper mapper;
     private final IncomeSenderMQ senderMQ;
     private final NotificationClient notification;
 
-    public IncomeCommand(ObjectMapper mapper, IncomeSenderMQ senderMQ, NotificationClient notification) {
-        this.mapper = mapper;
+    public IncomeCommand(IncomeSenderMQ senderMQ, NotificationClient notification) {
         this.senderMQ = senderMQ;
         this.notification = notification;
     }
@@ -34,6 +31,7 @@ public class IncomeCommand implements CommandHandler {
 
         String json = "";
         try {
+            ObjectMapper mapper = new ObjectMapper();
             json = mapper.writeValueAsString(transactionItem);
         } catch (JsonProcessingException e) {
             throw new RuntimeException("Failed to generate json string");

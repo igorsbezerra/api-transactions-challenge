@@ -1,4 +1,4 @@
-package dev.igor.apitransactions;
+package dev.igor.apitransactions.api.controller;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

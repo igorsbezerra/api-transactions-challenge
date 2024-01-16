@@ -14,5 +14,5 @@ import java.util.List;
 public class ResponseErrorList {
     private String statusCode;
     private String code;
-    private List<java.lang.Error> errors;
+    private List<Error> errors;
 }

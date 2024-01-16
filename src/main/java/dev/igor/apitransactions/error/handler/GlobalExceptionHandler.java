@@ -2,6 +2,7 @@ package dev.igor.apitransactions.error.handler;
 
 import dev.igor.apitransactions.error.ActionsYourSelfException;
 import dev.igor.apitransactions.error.UnavailableAccountException;
+import dev.igor.apitransactions.error.response.Error;
 import dev.igor.apitransactions.error.response.ResponseError;
 import dev.igor.apitransactions.error.response.ResponseErrorList;
 import org.springframework.http.HttpStatus;

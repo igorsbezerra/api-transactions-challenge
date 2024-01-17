@@ -13,6 +13,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 import dev.igor.apitransactions.api.request.TransactionRequest;
 import dev.igor.apitransactions.api.response.TransactionResponse;
 import dev.igor.apitransactions.client.AccountClient;
@@ -43,7 +45,7 @@ public class TransactionServiceTest {
     }
 
     @Test
-    void test2() {
+    void test2() throws JsonProcessingException {
         AccountDTO accountDTO = createAccountDTO();
         TransactionRequest request = createValidTransactionRequest();
         TransactionItem transactionItem = createTransactionItem();

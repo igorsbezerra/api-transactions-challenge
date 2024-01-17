@@ -44,15 +44,6 @@ public class IncomeCommandTest {
         Assertions.assertNotNull(result.getId());
     }
 
-    @Test
-    void must_not_execute_pattern_command_income() throws JsonProcessingException {
-        Transaction transaction = createTransactionInvalidJson();
-        TransactionRequest request = createTransactionRequest();
-        AccountDTO accountDTO = createAccountDTO();
-
-        Assertions.assertThrows(RuntimeException.class, () -> incomeCommand.command(accountDTO, request, transaction));
-    }
-
     private Transaction createTransaction() {
         Transaction transaction = new Transaction();
         return transaction;

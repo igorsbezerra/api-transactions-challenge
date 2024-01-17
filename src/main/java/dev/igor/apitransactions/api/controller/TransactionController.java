@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 @RestController
 @RequestMapping("/transactions")
 public class TransactionController {
@@ -21,7 +23,7 @@ public class TransactionController {
     }
 
     @PostMapping
-    public ResponseEntity<TransactionResponse> createTransaction(@RequestBody() TransactionRequest request) {
+    public ResponseEntity<TransactionResponse> createTransaction(@RequestBody() TransactionRequest request) throws JsonProcessingException {
         return ResponseEntity.status(HttpStatus.CREATED).body(transactionService.createTransaction(request));
     }
 }

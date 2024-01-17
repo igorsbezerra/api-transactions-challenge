@@ -24,17 +24,13 @@ public class IncomeCommand implements CommandHandler {
     }
 
     @Override
-    public TransactionItem command(AccountDTO account, TransactionRequest request, Transaction transaction) {
+    public TransactionItem command(AccountDTO account, TransactionRequest request, Transaction transaction) throws JsonProcessingException {
         TransactionItem transactionItem = TransactionItem.create(request);
         transactionItem.setType(TypeTransaction.INCOME);
 
-        String json = "";
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            json = mapper.writeValueAsString(transactionItem);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException("Failed to generate json string");
-        }
+
+        ObjectMapper mapper = new ObjectMapper();
+        String json = mapper.writeValueAsString(transactionItem);
 
         senderMQ.sendIncome(json);
         notification.sent();

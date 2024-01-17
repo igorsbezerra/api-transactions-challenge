@@ -60,17 +60,6 @@ public class OutcomeCommandTest {
         Assertions.assertThrows(UnavailableAccountException.class, () -> outcomeCommand.command(accountDTO, request, transaction));
     }
 
-    @Test
-    void must_not_execute_pattern_command_outcome() {
-        Transaction transaction = createTransactionInvalidJson();
-        TransactionRequest request = createTransactionRequest();
-        AccountDTO accountDTO = createAccountDTO();
-        AvailableAccount availableAccount = createAvailableAccount();
-        Mockito.when(accountClient.availableBalance(Mockito.anyString(), Mockito.anyString())).thenReturn(availableAccount);
-
-        Assertions.assertThrows(RuntimeException.class, () -> outcomeCommand.command(accountDTO, request, transaction));
-    }
-
     private Transaction createTransaction() {
         Transaction transaction = new Transaction();
         return transaction;

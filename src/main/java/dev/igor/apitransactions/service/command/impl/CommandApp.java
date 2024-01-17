@@ -9,6 +9,8 @@ import dev.igor.apitransactions.service.command.CommandHandler;
 import dev.igor.apitransactions.service.command.TransactionCommandHandler;
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 import java.util.List;
 import java.util.Map;
 
@@ -23,7 +25,7 @@ public class CommandApp implements TransactionCommandHandler {
     }
 
     @Override
-    public TransactionItem handler(TypeTransaction type, AccountDTO account, TransactionRequest request, Transaction transaction) {
+    public TransactionItem handler(TypeTransaction type, AccountDTO account, TransactionRequest request, Transaction transaction) throws JsonProcessingException {
         List<Map<TypeTransaction, CommandHandler>> commands =
                 List.of(
                     Map.of(TypeTransaction.INCOME, incomeCommand),

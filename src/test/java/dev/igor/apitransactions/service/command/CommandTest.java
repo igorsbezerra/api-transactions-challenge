@@ -13,6 +13,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 import dev.igor.apitransactions.api.request.TransactionRequest;
 import dev.igor.apitransactions.dto.AccountDTO;
 import dev.igor.apitransactions.model.Transaction;
@@ -32,7 +34,7 @@ public class CommandTest {
     private CommandApp command;
 
     @Test
-    void must_invoke_income_command() {
+    void must_invoke_income_command() throws JsonProcessingException {
         Transaction transaction = createTransaction();
         TransactionItem item = createTransactionItem();
         TransactionRequest request = createTransactionRequest();
@@ -45,7 +47,7 @@ public class CommandTest {
     }
 
     @Test
-    void must_invoke_outcome_command() {
+    void must_invoke_outcome_command() throws JsonProcessingException {
         Transaction transaction = createTransaction();
         TransactionItem item = createTransactionItem();
         TransactionRequest request = createTransactionRequest();

@@ -1,7 +1,9 @@
 package dev.igor.apitransactions.error.handler;
 
+import dev.igor.apitransactions.error.AccountNotFoundException;
 import dev.igor.apitransactions.error.ActionsYourSelfException;
 import dev.igor.apitransactions.error.UnavailableAccountException;
+import dev.igor.apitransactions.error.response.Error;
 import dev.igor.apitransactions.error.response.ResponseError;
 import dev.igor.apitransactions.error.response.ResponseErrorList;
 import org.springframework.http.HttpStatus;
@@ -46,5 +48,14 @@ public class GlobalExceptionHandler {
                         HttpStatus.BAD_REQUEST.toString(),
                         ex.getMessage(),
                         UnavailableAccountException.class.getSimpleName()));
+    }
+
+    @ExceptionHandler(AccountNotFoundException.class)
+    public ResponseEntity<ResponseError> handleAccountNotFoundException(AccountNotFoundException ex) {
+        return ResponseEntity.badRequest().body(
+                new ResponseError(
+                        HttpStatus.BAD_REQUEST.toString(),
+                        ex.getMessage(),
+                        AccountNotFoundException.class.getSimpleName()));
     }
 }

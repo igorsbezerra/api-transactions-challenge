@@ -13,6 +13,8 @@ import dev.igor.apitransactions.service.TransactionService;
 import dev.igor.apitransactions.service.command.TransactionCommandHandler;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 import java.util.List;
 
 @Service
@@ -28,7 +30,7 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public TransactionResponse createTransaction(TransactionRequest request) {
+    public TransactionResponse createTransaction(TransactionRequest request) throws JsonProcessingException {
         if (request.getTargetAccount().equals(request.getSourceAccount())) {
             throw new ActionsYourSelfException();
         }

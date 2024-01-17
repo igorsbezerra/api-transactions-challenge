@@ -15,29 +15,22 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Component
 public class IncomeCommand implements CommandHandler {
-
-    private final ObjectMapper mapper;
     private final IncomeSenderMQ senderMQ;
     private final NotificationClient notification;
 
-    public IncomeCommand(ObjectMapper mapper, IncomeSenderMQ senderMQ, NotificationClient notification) {
-        this.mapper = mapper;
+    public IncomeCommand(IncomeSenderMQ senderMQ, NotificationClient notification) {
         this.senderMQ = senderMQ;
         this.notification = notification;
     }
 
     @Override
-    public TransactionItem command(AccountDTO account, TransactionRequest request, Transaction transaction) {
+    public TransactionItem command(AccountDTO account, TransactionRequest request, Transaction transaction) throws JsonProcessingException {
         TransactionItem transactionItem = TransactionItem.create(request);
         transactionItem.setType(TypeTransaction.INCOME);
-        transactionItem.setTransaction(transaction);
 
-        String json = "";
-        try {
-            json = mapper.writeValueAsString(transactionItem);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException("Failed to generate json string");
-        }
+
+        ObjectMapper mapper = new ObjectMapper();
+        String json = mapper.writeValueAsString(transactionItem);
 
         senderMQ.sendIncome(json);
         notification.sent();

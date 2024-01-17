@@ -20,13 +20,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class OutcomeCommand implements CommandHandler {
     private final AccountClient accountClient;
     private final OutcomeSenderMQ senderMQ;
-    private final ObjectMapper mapper;
     private final NotificationClient notification;
 
-    public OutcomeCommand(AccountClient accountClient, OutcomeSenderMQ senderMQ, ObjectMapper mapper, NotificationClient notification) {
+    public OutcomeCommand(AccountClient accountClient, OutcomeSenderMQ senderMQ, NotificationClient notification) {
         this.accountClient = accountClient;
         this.senderMQ = senderMQ;
-        this.mapper = mapper;
         this.notification = notification;
     }
 
@@ -34,7 +32,6 @@ public class OutcomeCommand implements CommandHandler {
     public TransactionItem command(AccountDTO account, TransactionRequest request, Transaction transaction) {
         TransactionItem transactionItem = TransactionItem.create(request);
         transactionItem.setType(TypeTransaction.OUTCOME);
-        transactionItem.setTransaction(transaction);
 
         AvailableAccount availableAccount = accountClient.availableBalance(account.getAccountCode(), request.getAmount());
         if (!Boolean.parseBoolean(availableAccount.getAvailable())){
@@ -43,6 +40,7 @@ public class OutcomeCommand implements CommandHandler {
     
         String json = "";
         try {
+            ObjectMapper mapper = new ObjectMapper();
             json = mapper.writeValueAsString(transactionItem);
         } catch (JsonProcessingException e) {
             throw new RuntimeException("Failed to generate json string");

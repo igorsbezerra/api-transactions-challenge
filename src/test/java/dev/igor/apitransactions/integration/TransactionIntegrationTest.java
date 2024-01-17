@@ -61,6 +61,24 @@ public class TransactionIntegrationTest {
         ).andExpect(MockMvcResultMatchers.status().isCreated());
     }
 
+    @Test
+    void test2() throws JsonProcessingException, Exception {
+        mockMvc.perform(
+            MockMvcRequestBuilders.post("/transactions")
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+            .content(requestInvalid())
+        ).andExpect(MockMvcResultMatchers.status().isBadRequest());
+    }
+
+    @Test
+    void test3() throws JsonProcessingException, Exception {
+        mockMvc.perform(
+            MockMvcRequestBuilders.post("/transactions")
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+            .content(requestInvalidMethodArgument())
+        ).andExpect(MockMvcResultMatchers.status().isBadRequest());
+    }
+
     private String request() throws JsonProcessingException {
         ObjectNode objectNode = mapper.createObjectNode();
         objectNode.put("sourceAccount", "12345");
@@ -86,6 +104,22 @@ public class TransactionIntegrationTest {
     private String createAvailableAccount() throws JsonProcessingException {
         ObjectNode objectNode = mapper.createObjectNode();
         objectNode.put("available", "true");
+        return mapper.writeValueAsString(objectNode);
+    }
+
+    private String requestInvalid() throws JsonProcessingException {
+        ObjectNode objectNode = mapper.createObjectNode();
+        objectNode.put("sourceAccount", "12345");
+        objectNode.put("targetAccount", "12345");
+        objectNode.put("amount", "100");
+        return mapper.writeValueAsString(objectNode);
+    }
+
+    private String requestInvalidMethodArgument() throws JsonProcessingException {
+        ObjectNode objectNode = mapper.createObjectNode();
+        objectNode.put("sourceAccount", "1");
+        objectNode.put("targetAccount", "1");
+        objectNode.put("amount", "100");
         return mapper.writeValueAsString(objectNode);
     }
 }

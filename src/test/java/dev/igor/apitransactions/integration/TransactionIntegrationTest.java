@@ -105,6 +105,24 @@ public class TransactionIntegrationTest {
         MockServerAPIContainer.mockServerClient.reset();
     }
 
+    @Test
+    void test5() throws JsonProcessingException, Exception {
+
+        MockServerAPIContainer.mockServerClient.when(
+            HttpRequest.request().withMethod("GET").withQueryStringParameters(List.of(Parameter.param("accountCode", "12345"), Parameter.param("amount", "100")))
+        ).respond(
+            HttpResponse.response().withContentType(org.mockserver.model.MediaType.APPLICATION_JSON).withStatusCode(404)
+        );
+
+        mockMvc.perform(
+            MockMvcRequestBuilders.post("/transactions")
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+            .content(request())
+        ).andExpect(MockMvcResultMatchers.status().isBadRequest());
+
+        MockServerAPIContainer.mockServerClient.reset();
+    }
+
     private String request() throws JsonProcessingException {
         ObjectNode objectNode = mapper.createObjectNode();
         objectNode.put("sourceAccount", "12345");

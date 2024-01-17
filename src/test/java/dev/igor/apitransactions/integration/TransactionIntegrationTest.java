@@ -59,6 +59,8 @@ public class TransactionIntegrationTest {
             .contentType(MediaType.APPLICATION_JSON_VALUE)
             .content(request())
         ).andExpect(MockMvcResultMatchers.status().isCreated());
+
+        MockServerAPIContainer.mockServerClient.reset();
     }
 
     @Test
@@ -99,6 +101,8 @@ public class TransactionIntegrationTest {
             .contentType(MediaType.APPLICATION_JSON_VALUE)
             .content(request())
         ).andExpect(MockMvcResultMatchers.status().isBadRequest());
+
+        MockServerAPIContainer.mockServerClient.reset();
     }
 
     private String request() throws JsonProcessingException {

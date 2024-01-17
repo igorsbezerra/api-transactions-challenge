@@ -6,6 +6,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,7 +18,8 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class NotificationClient {
 
-    private String uri = "https://run.mocky.io/v3/9769bf3a-b0b6-477a-9ff5-91f63010c9d3";
+    @Value("${services.notification.url}")
+    private String uri;
 
     public void sent() {
         HttpClient http = HttpClient.newHttpClient();

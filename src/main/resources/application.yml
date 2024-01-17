@@ -1,13 +1,13 @@
 
 server:
-  port: 8082
+  port: ${SERVER_PORT:8082}
 
 spring:
   datasource:
-    url: jdbc:h2:mem:db
+    url: ${DB_HOST:jdbc:h2:mem:db}
     driverClassName: org.h2.Driver
-    username: sa
-    password: sa
+    username: ${DB_USERNAME:sa}
+    password: ${DB_PASSWORD:sa}
   h2:
     console:
       enabled: true
@@ -19,11 +19,13 @@ spring:
   hibernate:
     ddl-auto: update
   rabbitmq:
-    host: rabbitmq
+    host: ${MQ_HOST:localhost}
     port: 5672
-    username: admin
-    password: admin
+    username: ${MQ_USERNAME:admin}
+    password: ${MQ_PASSWORD:admin}
 
 services:
   account:
-    url: http://account:8081
+    url: ${SERVICES_ACCOUNT_URL:http://localhost:8081}
+  notification:
+    url: ${SERVICES_NOTIFICATION_URL:https://run.mocky.io/v3/9769bf3a-b0b6-477a-9ff5-91f63010c9d3}

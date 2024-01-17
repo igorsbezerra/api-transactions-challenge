@@ -3,6 +3,7 @@ package dev.igor.apitransactions.api.controller;
 import dev.igor.apitransactions.api.request.TransactionRequest;
 import dev.igor.apitransactions.api.response.TransactionResponse;
 import dev.igor.apitransactions.service.TransactionService;
+import jakarta.validation.Valid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,7 @@ public class TransactionController {
     }
 
     @PostMapping
-    public ResponseEntity<TransactionResponse> createTransaction(@RequestBody() TransactionRequest request) throws JsonProcessingException {
+    public ResponseEntity<TransactionResponse> createTransaction(@Valid @RequestBody() TransactionRequest request) throws JsonProcessingException {
         return ResponseEntity.status(HttpStatus.CREATED).body(transactionService.createTransaction(request));
     }
 }

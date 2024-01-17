@@ -79,6 +79,28 @@ public class TransactionIntegrationTest {
         ).andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 
+    @Test
+    void test4() throws JsonProcessingException, Exception {
+
+        MockServerAPIContainer.mockServerClient.when(
+            HttpRequest.request().withMethod("GET").withQueryStringParameters(List.of(Parameter.param("accountCode", "12345"), Parameter.param("amount", "100")))
+        ).respond(
+            HttpResponse.response().withContentType(org.mockserver.model.MediaType.APPLICATION_JSON).withStatusCode(200).withBody(createUnavailableAccount())
+        );
+
+        MockServerAPIContainer.mockServerClient.when(
+            HttpRequest.request().withMethod("GET").withPathParameter("accountCode", "12345")
+        ).respond(
+            HttpResponse.response().withContentType(org.mockserver.model.MediaType.APPLICATION_JSON).withStatusCode(200).withBody(responseJson())
+        );
+
+        mockMvc.perform(
+            MockMvcRequestBuilders.post("/transactions")
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+            .content(request())
+        ).andExpect(MockMvcResultMatchers.status().isBadRequest());
+    }
+
     private String request() throws JsonProcessingException {
         ObjectNode objectNode = mapper.createObjectNode();
         objectNode.put("sourceAccount", "12345");
@@ -104,6 +126,12 @@ public class TransactionIntegrationTest {
     private String createAvailableAccount() throws JsonProcessingException {
         ObjectNode objectNode = mapper.createObjectNode();
         objectNode.put("available", "true");
+        return mapper.writeValueAsString(objectNode);
+    }
+
+    private String createUnavailableAccount() throws JsonProcessingException {
+        ObjectNode objectNode = mapper.createObjectNode();
+        objectNode.put("available", "false");
         return mapper.writeValueAsString(objectNode);
     }
 

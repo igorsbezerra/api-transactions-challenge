@@ -32,7 +32,6 @@ public class OutcomeCommand implements CommandHandler {
     public TransactionItem command(AccountDTO account, TransactionRequest request, Transaction transaction) {
         TransactionItem transactionItem = TransactionItem.create(request);
         transactionItem.setType(TypeTransaction.OUTCOME);
-        transactionItem.setTransaction(transaction);
 
         AvailableAccount availableAccount = accountClient.availableBalance(account.getAccountCode(), request.getAmount());
         if (!Boolean.parseBoolean(availableAccount.getAvailable())){

@@ -27,7 +27,6 @@ public class IncomeCommand implements CommandHandler {
     public TransactionItem command(AccountDTO account, TransactionRequest request, Transaction transaction) {
         TransactionItem transactionItem = TransactionItem.create(request);
         transactionItem.setType(TypeTransaction.INCOME);
-        transactionItem.setTransaction(transaction);
 
         String json = "";
         try {

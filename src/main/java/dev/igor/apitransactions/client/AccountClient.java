@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@FeignClient(name = "account", url = "http://account:8081", configuration = AccountFeignClientConfig.class)
+@FeignClient(name = "account", url = "${services.account.url}", configuration = AccountFeignClientConfig.class)
 public interface AccountClient {
     @RequestMapping(method = RequestMethod.GET, value = "/accounts/{accountCode}")
     AccountDTO findByAccountCode(@PathVariable("accountCode") String accountCode);

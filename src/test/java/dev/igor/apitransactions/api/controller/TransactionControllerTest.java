@@ -1,5 +1,6 @@
 package dev.igor.apitransactions.api.controller;
 
+import dev.igor.apitransactions.api.response.RefoundResponse;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -41,5 +42,17 @@ public class TransactionControllerTest {
 
         Assertions.assertEquals(HttpStatus.CREATED, result.getStatusCode());
         Assertions.assertEquals(response.getId(), result.getBody().getId());
+    }
+
+    @Test
+    void it_must_be_possible_to_refound_a_transaction_when_invoking_the_refoundTransaction_method() throws JsonProcessingException {
+        final var expectedId = "10";
+        RefoundResponse expectedRefoundResponse = new RefoundResponse("true");
+        Mockito.when(service.refundTransaction(Mockito.anyString())).thenReturn(expectedRefoundResponse);
+
+        ResponseEntity<RefoundResponse> result = controller.refundTransaction(expectedId);
+
+        Assertions.assertEquals(HttpStatus.OK, result.getStatusCode());
+        Assertions.assertEquals(expectedRefoundResponse.getRefound(), result.getBody().getRefound());
     }
 }

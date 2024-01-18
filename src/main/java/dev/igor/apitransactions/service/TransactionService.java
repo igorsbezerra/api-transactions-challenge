@@ -8,5 +8,5 @@ import dev.igor.apitransactions.api.response.TransactionResponse;
 
 public interface TransactionService {
     TransactionResponse createTransaction(TransactionRequest request) throws JsonProcessingException;
-    RefoundResponse refundTransaction(String id);
+    RefoundResponse refundTransaction(String id) throws JsonProcessingException;
 }

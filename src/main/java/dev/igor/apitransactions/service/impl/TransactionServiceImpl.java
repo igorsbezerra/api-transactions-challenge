@@ -62,7 +62,7 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public RefoundResponse refundTransaction(String id) {
+    public RefoundResponse refundTransaction(String id) throws JsonProcessingException {
         Optional<Transaction> transactionExists = repository.findById(id);
         if (transactionExists.isEmpty()) {
             throw new TransactionNotFoundException();
@@ -75,13 +75,8 @@ public class TransactionServiceImpl implements TransactionService {
         message.setTargetAccount(transactionItem.getTargetAccount());
         message.setAmount(transactionItem.getAmount().toString());
 
-        String json = "";
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            json = mapper.writeValueAsString(message);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException("Failed to generate json string");
-        }
+        ObjectMapper mapper = new ObjectMapper();
+        String json = mapper.writeValueAsString(message);
 
         senderMQ.sendDevolution(json);
 

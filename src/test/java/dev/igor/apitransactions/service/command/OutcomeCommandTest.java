@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -35,7 +36,7 @@ public class OutcomeCommandTest {
     private OutcomeCommand outcomeCommand;
 
     @Test
-    void must_execute_pattern_command_outcome() {
+    void must_execute_pattern_command_outcome() throws JsonProcessingException {
         Transaction transaction = createTransaction();
         TransactionRequest request = createTransactionRequest();
         AccountDTO accountDTO = createAccountDTO();

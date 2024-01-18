@@ -3,8 +3,10 @@ package dev.igor.apitransactions.service;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
+import dev.igor.apitransactions.api.response.RefoundResponse;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,9 +22,12 @@ import dev.igor.apitransactions.api.response.TransactionResponse;
 import dev.igor.apitransactions.client.AccountClient;
 import dev.igor.apitransactions.dto.AccountDTO;
 import dev.igor.apitransactions.error.ActionsYourSelfException;
+import dev.igor.apitransactions.error.TransactionNotFoundException;
+import dev.igor.apitransactions.event.impl.SenderMQImpl;
 import dev.igor.apitransactions.model.Transaction;
 import dev.igor.apitransactions.model.TransactionItem;
 import dev.igor.apitransactions.model.enums.TypeTransaction;
+import dev.igor.apitransactions.repository.TransactionItemRepository;
 import dev.igor.apitransactions.repository.TransactionRepository;
 import dev.igor.apitransactions.service.command.TransactionCommandHandler;
 import dev.igor.apitransactions.service.impl.TransactionServiceImpl;
@@ -31,6 +36,10 @@ import dev.igor.apitransactions.service.impl.TransactionServiceImpl;
 public class TransactionServiceTest {
     @Mock
     private TransactionRepository repository;
+    @Mock
+    private TransactionItemRepository itemRepository;
+    @Mock
+    private SenderMQImpl senderMQ;
     @Mock
     private AccountClient accountClient;
     @Mock
@@ -57,6 +66,31 @@ public class TransactionServiceTest {
         TransactionResponse result = service.createTransaction(request);
 
         Assertions.assertNotNull(result);
+    }
+
+    @Test
+    void test3() throws JsonProcessingException {
+        final var expectedId = "1";
+        final var expectedResponse = "true";
+        final var expectedTransaction = createTransaction();
+        final var expectedTransactionItem = createTransactionItem();
+
+        Mockito.when(repository.findById(Mockito.anyString())).thenReturn(Optional.of(expectedTransaction));
+        Mockito.when(itemRepository.findByTransaction(Mockito.anyString())).thenReturn(List.of(expectedTransactionItem));
+        Mockito.doNothing().when(senderMQ).sendDevolution(Mockito.anyString());
+
+        RefoundResponse refoundResponse = service.refundTransaction(expectedId);
+
+        Assertions.assertEquals(expectedResponse, refoundResponse.getRefound());
+    }
+
+    @Test
+    void test4() throws JsonProcessingException {
+        final var expectedId = "1";
+
+        Mockito.when(repository.findById(Mockito.anyString())).thenReturn(Optional.empty());
+        
+        Assertions.assertThrows(TransactionNotFoundException.class, () -> service.refundTransaction(expectedId));
     }
 
     private TransactionRequest createInvalidTransactionRequest() {

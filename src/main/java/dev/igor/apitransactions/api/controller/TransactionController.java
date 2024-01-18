@@ -31,7 +31,7 @@ public class TransactionController {
     }
 
     @PostMapping("/{id}/devolution")
-    public ResponseEntity<RefoundResponse> refundTransaction(@PathVariable("id") String id) {
+    public ResponseEntity<RefoundResponse> refundTransaction(@PathVariable("id") String id) throws JsonProcessingException {
         return ResponseEntity.ok(transactionService.refundTransaction(id));
     }
 }

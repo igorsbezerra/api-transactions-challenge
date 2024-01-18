@@ -1,6 +1,9 @@
 package dev.igor.apitransactions.integration;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,6 +27,10 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import dev.igor.apitransactions.MockServerAPIContainer;
 import dev.igor.apitransactions.RabbitMQContainer;
+import dev.igor.apitransactions.model.Transaction;
+import dev.igor.apitransactions.model.TransactionItem;
+import dev.igor.apitransactions.model.enums.TypeTransaction;
+import dev.igor.apitransactions.repository.TransactionItemRepository;
 
 @SpringBootTest
 @ActiveProfiles(profiles = "test")
@@ -33,6 +40,7 @@ import dev.igor.apitransactions.RabbitMQContainer;
 public class TransactionIntegrationTest {
     @Autowired private MockMvc mockMvc;
     @Autowired private ObjectMapper mapper;
+    @Autowired private TransactionItemRepository repository;
     
     @Test
     void test() throws Exception {
@@ -123,6 +131,19 @@ public class TransactionIntegrationTest {
         MockServerAPIContainer.mockServerClient.reset();
     }
 
+    @Test
+    void test6() throws JsonProcessingException, Exception {
+        TransactionItem transaction = repository.save(transactionItem());
+
+        mockMvc.perform(
+            MockMvcRequestBuilders.post("/transactions/" + transaction.getTransaction().getId() + "/devolution")
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+            .content(request())
+        ).andExpect(MockMvcResultMatchers.status().is2xxSuccessful());
+
+        MockServerAPIContainer.mockServerClient.reset();
+    }
+
     private String request() throws JsonProcessingException {
         ObjectNode objectNode = mapper.createObjectNode();
         objectNode.put("sourceAccount", "12345");
@@ -171,5 +192,29 @@ public class TransactionIntegrationTest {
         objectNode.put("targetAccount", "1");
         objectNode.put("amount", "100");
         return mapper.writeValueAsString(objectNode);
+    }
+
+    private Transaction createTransaction() {
+        final var expectedId = UUID.randomUUID().toString();
+        final var expectedDevolution = false;
+        final var expectedCreatedAt = LocalDateTime.now().toString();
+        return  new Transaction(expectedId, expectedDevolution, expectedCreatedAt);
+    }
+
+    private TransactionItem transactionItem() {
+        final var expectedId = UUID.randomUUID().toString();
+        final var expectedSourceAccount = "123456";
+        final var expectedTargetAccount = "santander";
+        final var expectedAmount = new BigDecimal("100");
+        final var expectedTransactionType = TypeTransaction.INCOME;
+        final var expectedTransaction = createTransaction();
+        TransactionItem item = new TransactionItem();
+        item.setId(expectedId);
+        item.setSourceAccount(expectedSourceAccount);
+        item.setTargetAccount(expectedTargetAccount);
+        item.setAmount(expectedAmount);
+        item.setType(expectedTransactionType);
+        item.setTransaction(expectedTransaction);
+        return item;
     }
 }

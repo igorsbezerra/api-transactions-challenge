@@ -27,7 +27,7 @@ public class TransactionItem {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private TypeTransaction type;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "transaction_id")
     private Transaction transaction;
 

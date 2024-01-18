@@ -29,7 +29,7 @@ public class OutcomeCommand implements CommandHandler {
     }
 
     @Override
-    public TransactionItem command(AccountDTO account, TransactionRequest request, Transaction transaction) {
+    public TransactionItem command(AccountDTO account, TransactionRequest request, Transaction transaction) throws JsonProcessingException {
         TransactionItem transactionItem = TransactionItem.create(request);
         transactionItem.setType(TypeTransaction.OUTCOME);
         transactionItem.setTransaction(transaction);
@@ -38,14 +38,9 @@ public class OutcomeCommand implements CommandHandler {
         if (!Boolean.parseBoolean(availableAccount.getAvailable())){
             throw new UnavailableAccountException();
         }
-    
-        String json = "";
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            json = mapper.writeValueAsString(transactionItem);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException("Failed to generate json string");
-        }
+
+        ObjectMapper mapper = new ObjectMapper();
+        String json = mapper.writeValueAsString(transactionItem);
 
         senderMQ.sendOutCome(json);
         notification.sent();

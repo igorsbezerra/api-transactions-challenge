@@ -3,8 +3,10 @@ package dev.igor.apitransactions.service;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
+import dev.igor.apitransactions.api.response.RefoundResponse;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -57,6 +59,19 @@ public class TransactionServiceTest {
         TransactionResponse result = service.createTransaction(request);
 
         Assertions.assertNotNull(result);
+    }
+
+    @Test
+    void test3() throws JsonProcessingException {
+        final var expectedId = "1";
+        final var expectedResponse = "true";
+        final var expectedTransaction = createValidTransactionRequest();
+
+        Mockito.when(repository.findById(Mockito.anyString())).thenReturn(Optional.of(expectedTransaction));
+
+        RefoundResponse refoundResponse = service.refundTransaction(expectedId);
+
+        Assertions.assertEquals(expectedResponse, refoundResponse.getRefound());
     }
 
     private TransactionRequest createInvalidTransactionRequest() {

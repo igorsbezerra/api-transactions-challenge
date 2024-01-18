@@ -1,6 +1,7 @@
 package dev.igor.apitransactions.service.impl;
 
 import dev.igor.apitransactions.api.request.TransactionRequest;
+import dev.igor.apitransactions.api.response.RefoundResponse;
 import dev.igor.apitransactions.api.response.TransactionResponse;
 import dev.igor.apitransactions.client.AccountClient;
 import dev.igor.apitransactions.dto.AccountDTO;
@@ -61,7 +62,7 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public void refundTransaction(String id) {
+    public RefoundResponse refundTransaction(String id) {
         Optional<Transaction> transactionExists = repository.findById(id);
         if (transactionExists.isEmpty()) {
             throw new TransactionNotFoundException();
@@ -86,5 +87,6 @@ public class TransactionServiceImpl implements TransactionService {
 
         transaction.setDevolution(true);
         repository.save(transaction);
+        return new RefoundResponse("true");
     }
 }

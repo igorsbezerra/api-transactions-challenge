@@ -1,6 +1,7 @@
 package dev.igor.apitransactions.api.controller;
 
 import dev.igor.apitransactions.api.request.TransactionRequest;
+import dev.igor.apitransactions.api.response.RefoundResponse;
 import dev.igor.apitransactions.api.response.TransactionResponse;
 import dev.igor.apitransactions.service.TransactionService;
 import jakarta.validation.Valid;
@@ -30,8 +31,7 @@ public class TransactionController {
     }
 
     @PostMapping("/{id}/devolution")
-    public ResponseEntity<Void> refundTransaction(@PathVariable("id") String id) {
-        transactionService.refundTransaction(id);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<RefoundResponse> refundTransaction(@PathVariable("id") String id) {
+        return ResponseEntity.ok(transactionService.refundTransaction(id));
     }
 }

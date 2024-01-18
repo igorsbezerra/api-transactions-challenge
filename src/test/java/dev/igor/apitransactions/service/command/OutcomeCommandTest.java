@@ -18,7 +18,7 @@ import dev.igor.apitransactions.client.NotificationClient;
 import dev.igor.apitransactions.dto.AccountDTO;
 import dev.igor.apitransactions.dto.AvailableAccount;
 import dev.igor.apitransactions.error.UnavailableAccountException;
-import dev.igor.apitransactions.event.OutcomeSenderMQ;
+import dev.igor.apitransactions.event.impl.SenderMQImpl;
 import dev.igor.apitransactions.model.Transaction;
 import dev.igor.apitransactions.model.TransactionItem;
 import dev.igor.apitransactions.service.command.impl.OutcomeCommand;
@@ -28,7 +28,7 @@ public class OutcomeCommandTest {
     @Mock
     private AccountClient accountClient;
     @Mock
-    private OutcomeSenderMQ senderMQ;
+    private SenderMQImpl senderMQ;
     @Mock
     private NotificationClient notificationClient;
     @InjectMocks
@@ -40,7 +40,7 @@ public class OutcomeCommandTest {
         TransactionRequest request = createTransactionRequest();
         AccountDTO accountDTO = createAccountDTO();
         AvailableAccount availableAccount = createAvailableAccount();
-        Mockito.doNothing().when(senderMQ).sendOutcome(Mockito.anyString());
+        Mockito.doNothing().when(senderMQ).sendOutCome(Mockito.anyString());
         Mockito.doNothing().when(notificationClient).sent();
         Mockito.when(accountClient.availableBalance(Mockito.anyString(), Mockito.anyString())).thenReturn(availableAccount);
 
@@ -81,7 +81,7 @@ public class OutcomeCommandTest {
     private Transaction createTransactionInvalidJson() {
         final var expectedId = UUID.randomUUID().toString();
         final var expectedDevolution = false;
-        final var expectedCreatedAt = LocalDateTime.now();;
+        final var expectedCreatedAt = LocalDateTime.now().toString();
         final var expectedTransactionItems = List.of(new TransactionItem());
 
         Transaction transaction = new Transaction();

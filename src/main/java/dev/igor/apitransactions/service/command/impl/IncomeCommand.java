@@ -3,7 +3,7 @@ package dev.igor.apitransactions.service.command.impl;
 import dev.igor.apitransactions.api.request.TransactionRequest;
 import dev.igor.apitransactions.client.NotificationClient;
 import dev.igor.apitransactions.dto.AccountDTO;
-import dev.igor.apitransactions.event.IncomeSenderMQ;
+import dev.igor.apitransactions.event.SenderMQ;
 import dev.igor.apitransactions.model.Transaction;
 import dev.igor.apitransactions.model.TransactionItem;
 import dev.igor.apitransactions.model.enums.TypeTransaction;
@@ -15,10 +15,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Component
 public class IncomeCommand implements CommandHandler {
-    private final IncomeSenderMQ senderMQ;
+    private final SenderMQ senderMQ;
     private final NotificationClient notification;
 
-    public IncomeCommand(IncomeSenderMQ senderMQ, NotificationClient notification) {
+    public IncomeCommand(SenderMQ senderMQ, NotificationClient notification) {
         this.senderMQ = senderMQ;
         this.notification = notification;
     }
@@ -27,7 +27,7 @@ public class IncomeCommand implements CommandHandler {
     public TransactionItem command(AccountDTO account, TransactionRequest request, Transaction transaction) throws JsonProcessingException {
         TransactionItem transactionItem = TransactionItem.create(request);
         transactionItem.setType(TypeTransaction.INCOME);
-
+        transactionItem.setTransaction(transaction);
 
         ObjectMapper mapper = new ObjectMapper();
         String json = mapper.writeValueAsString(transactionItem);

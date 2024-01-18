@@ -2,7 +2,8 @@ package dev.igor.apitransactions.model.enums;
 
 public enum TypeTransaction {
     INCOME("income"),
-    OUTCOME("outcome");
+    OUTCOME("outcome"),
+    DEVOLUTION("devolution");
 
     private String value;
 

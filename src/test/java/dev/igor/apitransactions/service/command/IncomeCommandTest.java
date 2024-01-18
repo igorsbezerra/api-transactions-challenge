@@ -15,7 +15,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import dev.igor.apitransactions.api.request.TransactionRequest;
 import dev.igor.apitransactions.client.NotificationClient;
 import dev.igor.apitransactions.dto.AccountDTO;
-import dev.igor.apitransactions.event.IncomeSenderMQ;
+import dev.igor.apitransactions.event.impl.SenderMQImpl;
 import dev.igor.apitransactions.model.Transaction;
 import dev.igor.apitransactions.model.TransactionItem;
 import dev.igor.apitransactions.service.command.impl.IncomeCommand;
@@ -23,7 +23,7 @@ import dev.igor.apitransactions.service.command.impl.IncomeCommand;
 @ExtendWith(MockitoExtension.class)
 public class IncomeCommandTest {
     @Mock
-    private IncomeSenderMQ incomeSenderMQ;
+    private SenderMQImpl incomeSenderMQ;
     @Mock
     private NotificationClient notificationClient;
 
@@ -65,7 +65,7 @@ public class IncomeCommandTest {
     private Transaction createTransactionInvalidJson() {
         final var expectedId = UUID.randomUUID().toString();
         final var expectedDevolution = false;
-        final var expectedCreatedAt = LocalDateTime.now();;
+        final var expectedCreatedAt = LocalDateTime.now().toString();
         final var expectedTransactionItems = List.of(new TransactionItem());
 
         Transaction transaction = new Transaction();

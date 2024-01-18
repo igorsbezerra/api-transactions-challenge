@@ -27,4 +27,14 @@ public class RabbitMQConfig {
         // auto_delete: false
         return new Queue("queue-income", true, false, false);
     }
+
+    @Bean
+    public Queue queueDevolution() {
+        // This queue has the following properties:
+        // name: my_durable
+        // durable: true
+        // exclusive: false
+        // auto_delete: false
+        return new Queue("queue-devolution", true, false, false);
+    }
 }

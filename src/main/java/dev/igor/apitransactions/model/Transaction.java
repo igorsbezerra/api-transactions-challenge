@@ -18,11 +18,11 @@ public class Transaction {
     @Column(name = "id", length = 36, nullable = false)
     private String id;
     private boolean devolution;
-    private LocalDateTime createdAt;
+    private String createdAt;
     @OneToMany(mappedBy = "transaction", cascade = CascadeType.ALL)
     private List<TransactionItem> transactionItems;
 
-    public Transaction(String id, boolean devolution, LocalDateTime createdAt) {
+    public Transaction(String id, boolean devolution, String createdAt) {
         this.id = id;
         this.devolution = devolution;
         this.createdAt = createdAt;
@@ -30,7 +30,7 @@ public class Transaction {
 
     public static Transaction create() {
         String id = UUID.randomUUID().toString();
-        LocalDateTime now = LocalDateTime.now();
+        String now = LocalDateTime.now().toString();
         boolean devolution = false;
         return new Transaction(id, devolution, now);
     }

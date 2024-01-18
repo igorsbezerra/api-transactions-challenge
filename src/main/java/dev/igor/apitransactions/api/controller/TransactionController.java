@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,5 +27,11 @@ public class TransactionController {
     @PostMapping
     public ResponseEntity<TransactionResponse> createTransaction(@Valid @RequestBody() TransactionRequest request) throws JsonProcessingException {
         return ResponseEntity.status(HttpStatus.CREATED).body(transactionService.createTransaction(request));
+    }
+
+    @PostMapping("/{id}/devolution")
+    public ResponseEntity<Void> refundTransaction(@PathVariable("id") String id) {
+        transactionService.refundTransaction(id);
+        return ResponseEntity.ok().build();
     }
 }

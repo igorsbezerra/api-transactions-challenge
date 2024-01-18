@@ -110,7 +110,7 @@ public class TransactionServiceTest {
     private Transaction createTransaction() {
         final var expectedId = UUID.randomUUID().toString();
         final var expectedDevolution = false;
-        final var expectedCreatedAt = LocalDateTime.now();;
+        final var expectedCreatedAt = LocalDateTime.now().toString();
         final var expectedTransactionItems = List.of(new TransactionItem());
 
         Transaction transaction = new Transaction();
